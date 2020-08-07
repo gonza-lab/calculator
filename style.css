@@ -72,10 +72,12 @@ body {
   height: 26px;
   margin: 0.1em;
   overflow: hidden;
+  
 }
 
 .calc > .front {
   text-shadow: 0.5px 1px 2px rgba(0, 0, 0, 0.7);
+  padding-left: 2px;
 }
 
 .calc,
@@ -121,4 +123,8 @@ body {
   background-color: rgba(241, 196, 15, 1);
   color: white;
   box-shadow: 0 4px 0 rgba(131, 86, 0, 1);
+}
+
+.hidden{
+  display: none;
 }
