@@ -3,6 +3,11 @@
   src: url(fonts/DSEG14Classic-Regular.ttf);
 }
 
+@font-face{
+  font-family: led-calculator;
+  src: url(fonts/LEDCalculator.ttf);
+}
+
 *,
 *::before,
 *::after {
@@ -68,11 +73,11 @@ body {
 
 .calc {
   width: 100%;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   height: 26px;
   margin: 0.1em;
   overflow: hidden;
-  
+  font-family: led-calculator;
 }
 
 .calc > .front {

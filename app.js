@@ -1,9 +1,8 @@
 console.log("Hola Mundo :D");
 
-const KEYS = document.querySelectorAll(".key");
-const NUMBERS_KEYS = [];
 const CAL = document.querySelector(".calc > .front");
 const RES = document.querySelector(".result > .front");
+let isNewCalc = true;
 
 function addCAL(char) {
   CAL.textContent += char;
@@ -13,11 +12,15 @@ function delCAL() {
   CAL.textContent = CAL.textContent.substr(0, CAL.textContent.length - 1);
 }
 
-function getCAL(){
+function getCAL() {
   return document.querySelector(".calc > .front").textContent;
 }
 
-function setResult(result){
+function setCAL(cal) {
+  document.querySelector(".calc > .front").textContent = cal;
+}
+
+function setResult(result) {
   document.querySelector(".result > .front").textContent = result;
 }
 
@@ -53,7 +56,6 @@ function orderByPEMDAS(e1, e2) {
   return e1Value - e2Value;
 }
 
-
 function calc(expressions) {
   expressions = insertPlus(expressions);
   let newExpression = expressions.split("+");
@@ -61,10 +63,24 @@ function calc(expressions) {
 
   newExpression = newExpression.map((calculation) => {
     let index = 0;
+    let index2 = 0;
     let num1 = 0;
     let num2 = 0;
+    let num3 = 0;
 
-    if (calculation.includes("*")) {
+    if (calculation.includes("^") && calculation.includes("/")) {
+      index = calculation.indexOf("^");
+      index2 = calculation.indexOf("/");
+      num1 = calculation.substring(0, index);
+      num2 = calculation.substring(index + 1, index2);
+      num3 = calculation.substring(index2 + 1, calculation.length);
+      return num1 ** (num2 / num3);
+    } else if (calculation.includes("^")) {
+      index = calculation.indexOf("^");
+      num1 = calculation.substring(0, index);
+      num2 = calculation.substring(index + 1, calculation.length);
+      return num1 ** num2;
+    } else if (calculation.includes("*")) {
       index = calculation.indexOf("*");
       num1 = calculation.substring(0, index);
       num2 = calculation.substring(index + 1, calculation.length);
@@ -81,19 +97,21 @@ function calc(expressions) {
 
   let result = newExpression.reduce((acumulator, current) => {
     return acumulator + current;
-  })
+  });
 
   return +result.toFixed(4);
 }
 
-KEYS.forEach((key) => {
-  if (
-    key.id.codePointAt(0) >= "0".codePointAt(0) &&
-    key.id.codePointAt(0) <= "9".codePointAt(0)
-  ) {
-    NUMBERS_KEYS.push(key);
-  }
-});
+function addFunctionKey(keys) {
+  keys.forEach((key) => {
+    document.getElementById(key).addEventListener("click", () => {
+      if (getCAL()[getCAL().length - 1] === "_") {
+        delCAL();
+      }
+      addCAL(key);
+    });
+  });
+}
 
 document.querySelectorAll(".key").forEach((key) => {
   key.addEventListener("click", () => {
@@ -104,52 +122,67 @@ document.querySelectorAll(".key").forEach((key) => {
   });
 });
 
-NUMBERS_KEYS.forEach((key) => {
-  key.addEventListener("click", () => {
-    addCAL(key.id);
-  });
-});
-
 document.getElementById("Backspace").addEventListener("click", () => {
+  if (getCAL()[getCAL().length - 1] === "_") {
+    delCAL();
+  }
   delCAL();
 });
 
 document.getElementById("ac").addEventListener("click", () => {
   setResult("");
-})
-
-document.getElementById("+").addEventListener("click", () => {
-  addCAL("+");
-});
-
-document.getElementById("-").addEventListener("click", () => {
-  addCAL("-");
-});
-
-document.getElementById("*").addEventListener("click", () => {
-  addCAL("*");
-});
-
-document.getElementById("/").addEventListener("click", () => {
-  addCAL("/");
-});
-
-document.getElementById(".").addEventListener("click", () => {
-  addCAL(".");
 });
 
 document.getElementById("Enter").addEventListener("click", () => {
+  isNewCalc = true;
+  if (getCAL()[getCAL().length - 1] === "_") {
+    delCAL();
+  }
   setResult(calc(getCAL()));
 });
 
+document.getElementById("sqr").addEventListener("click", () => {
+  if (getCAL()[getCAL().length - 1] === "_") {
+    delCAL();
+  }
+  addCAL("^1/");
+});
+
+let keys = [
+  "+",
+  "-",
+  "*",
+  "/",
+  ".",
+  "^",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "0",
+];
+addFunctionKey(keys);
+
 document.addEventListener("keydown", (event) => {
   if (document.getElementById(`${event.key}`)) {
+    if (isNewCalc) {
+      setCAL("");
+      isNewCalc = false;
+    }
     document.getElementById(`${event.key}`).click();
   }
 });
 
-setInterval(function(){
-  document.querySelector(".calc > .front").classList.toggle("hidden");
+setInterval(function () {
+  addCAL("_");
+  setTimeout(function () {
+    if (getCAL()[getCAL().length - 1] === "_") {
+      delCAL();
+    }
+  }, 500);
 }, 1000);
-
-
