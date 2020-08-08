@@ -119,6 +119,9 @@ document.querySelectorAll(".key").forEach((key) => {
       setCAL("");
       isNewCalc = false;
     }
+    if (getCAL()[getCAL().length - 1] === "_") {
+      delCAL();
+    }
     key.classList.toggle("keyActive");
     setTimeout(function () {
       key.classList.toggle("keyActive");
@@ -127,9 +130,6 @@ document.querySelectorAll(".key").forEach((key) => {
 });
 
 document.getElementById("Backspace").addEventListener("click", () => {
-  if (getCAL()[getCAL().length - 1] === "_") {
-    delCAL();
-  }
   delCAL();
 });
 
@@ -139,16 +139,10 @@ document.getElementById("ac").addEventListener("click", () => {
 
 document.getElementById("Enter").addEventListener("click", () => {
   isNewCalc = true;
-  if (getCAL()[getCAL().length - 1] === "_") {
-    delCAL();
-  }
   setResult(calc(getCAL()));
 });
 
 document.getElementById("sqr").addEventListener("click", () => {
-  if (getCAL()[getCAL().length - 1] === "_") {
-    delCAL();
-  }
   addCAL("^1/");
 });
 
