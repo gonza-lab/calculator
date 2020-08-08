@@ -115,6 +115,10 @@ function addFunctionKey(keys) {
 
 document.querySelectorAll(".key").forEach((key) => {
   key.addEventListener("click", () => {
+    if (isNewCalc) {
+      setCAL("");
+      isNewCalc = false;
+    }
     key.classList.toggle("keyActive");
     setTimeout(function () {
       key.classList.toggle("keyActive");
@@ -170,10 +174,6 @@ addFunctionKey(keys);
 
 document.addEventListener("keydown", (event) => {
   if (document.getElementById(`${event.key}`)) {
-    if (isNewCalc) {
-      setCAL("");
-      isNewCalc = false;
-    }
     document.getElementById(`${event.key}`).click();
   }
 });
